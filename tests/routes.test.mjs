@@ -19,6 +19,9 @@ test("server-renders the anonymous game start experience", async () => {
   const html = await response.text();
   assert.match(html, /Play with pointer/);
   assert.match(html, /Camera stays on this device/);
+  assert.match(html, /morning-star-hero\.png/);
+  assert.match(html, />KO</);
+  assert.match(html, />EN</);
   assert.match(html, /https:\/\/github\.com\/ahndohun\/manse-game-morning-star-catch/);
   assert.doesNotMatch(html, /replace-me/);
   assert.doesNotMatch(html, /signin-with-chatgpt|<iframe\b|<form\b/i);
@@ -28,7 +31,9 @@ test("build bundles the public contract and pose runtime", async () => {
   const manifest = JSON.parse(await readFile("public/.well-known/manse-game.json", "utf8"));
   assert.equal(typeof manifest.slug, "string");
   assert.equal(manifest.slug.length > 0, true);
+  assert.equal(manifest.sourceUrl, "https://github.com/ahndohun/manse-game-morning-star-catch");
   await access(`public/packs/${manifest.slug}/manse.pack.json`);
+  await access(`public/packs/${manifest.slug}/assets/images/morning-star-hero.png`);
   await access("dist/client/sw.js");
   await access("dist/client/models/pose_landmarker_lite.task");
   await access("dist/client/vendor/mediapipe/wasm/vision_wasm_internal.wasm");

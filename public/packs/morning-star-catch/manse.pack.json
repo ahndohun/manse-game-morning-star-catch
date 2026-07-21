@@ -5,18 +5,27 @@
     "title": [
       {
         "locale": "ko",
-        "text": "반짝별 잡기 (Morning Star Catch)"
+        "text": "반짝별 잡기"
+      },
+      {
+        "locale": "en",
+        "text": "Morning Star Catch"
       }
     ],
     "summary": [
       {
         "locale": "ko",
+        "text": "고요한 밤하늘을 떠다니는 반짝별을 향해 손을 뻗어 잡아 보세요."
+      },
+      {
+        "locale": "en",
         "text": "Reach out and catch the twinkling stars drifting across the night sky."
       }
     ],
     "theme": "A gentle night-sky playground where a child catches twinkling stars with their hands",
     "locales": [
-      "ko"
+      "ko",
+      "en"
     ],
     "ageBands": [
       "2-3",
@@ -44,6 +53,10 @@
       "name": [
         {
           "locale": "ko",
+          "text": "안내자"
+        },
+        {
+          "locale": "en",
           "text": "Guide"
         }
       ],
@@ -60,6 +73,11 @@
         "items": [
           {
             "locale": "ko",
+            "text": "별들이 떴어요! 반짝이는 별을 함께 잡아 봐요.",
+            "audioAssetId": null
+          },
+          {
+            "locale": "en",
             "text": "The stars are out! Let's catch the twinkling ones.",
             "audioAssetId": null
           }
@@ -69,7 +87,7 @@
       "demo": null,
       "challenge": null,
       "learning": null,
-      "artAssetId": null,
+      "artAssetId": "morning-star-hero",
       "energy": "calm",
       "terminal": false,
       "transitions": [
@@ -87,6 +105,11 @@
         "items": [
           {
             "locale": "ko",
+            "text": "손을 뻗어 반짝이는 별을 하나씩 터치해 잡아 보세요.",
+            "audioAssetId": null
+          },
+          {
+            "locale": "en",
             "text": "Reach out and touch each twinkling star to catch it.",
             "audioAssetId": null
           }
@@ -109,7 +132,7 @@
         "kind": "none",
         "payload": []
       },
-      "artAssetId": null,
+      "artAssetId": "morning-star-hero",
       "energy": "medium",
       "terminal": false,
       "transitions": [
@@ -137,6 +160,11 @@
         "items": [
           {
             "locale": "ko",
+            "text": "손을 뻗어 반짝이는 별을 하나씩 터치해 잡아 보세요.",
+            "audioAssetId": null
+          },
+          {
+            "locale": "en",
             "text": "Reach out and touch each twinkling star to catch it.",
             "audioAssetId": null
           }
@@ -159,7 +187,7 @@
         "kind": "none",
         "payload": []
       },
-      "artAssetId": null,
+      "artAssetId": "morning-star-hero",
       "energy": "medium",
       "terminal": false,
       "transitions": [
@@ -182,6 +210,11 @@
         "items": [
           {
             "locale": "ko",
+            "text": "모든 별을 잡았어요! 밤하늘이 반짝반짝 빛나요.",
+            "audioAssetId": null
+          },
+          {
+            "locale": "en",
             "text": "You caught every star! The sky is sparkling just for you.",
             "audioAssetId": null
           }
@@ -191,7 +224,7 @@
       "demo": null,
       "challenge": null,
       "learning": null,
-      "artAssetId": null,
+      "artAssetId": "morning-star-hero",
       "energy": "calm",
       "terminal": true,
       "transitions": []
@@ -206,7 +239,36 @@
     "maxHighEnergyMs": 60000
   },
   "assets": {
-    "images": [],
+    "images": [
+      {
+        "id": "morning-star-hero",
+        "path": "assets/images/morning-star-hero.png",
+        "mediaType": "image/png",
+        "alt": [
+          {
+            "locale": "ko",
+            "text": "페리윙클 구름 사이 밤하늘에서 부드러운 곡선을 그리며 흐르는 세 개의 금빛 반짝별"
+          },
+          {
+            "locale": "en",
+            "text": "Three warm golden stars drifting in gentle arcs through a navy sky above layered periwinkle clouds"
+          }
+        ],
+        "license": {
+          "spdxId": "MIT",
+          "name": "MIT License",
+          "url": "https://spdx.org/licenses/MIT.html",
+          "attribution": "Generated for Manse — Morning Star Catch"
+        },
+        "provenance": {
+          "kind": "generated",
+          "tool": "OpenAI image generation (built-in imagegen)",
+          "model": "Not reported by the built-in tool",
+          "prompt": "Use case: stylized-concept\nAsset type: game website hero illustration, 16:9 landscape\nPrimary request: Create an original, dreamy night-sky scene for a gentle child-friendly motion game about catching twinkling morning stars. Warm golden stars drift along calm, reachable curved paths above softly layered periwinkle cloud islands.\nScene/backdrop: Deep navy night sky with sparse constellation dots, subtle painterly grain, and a quiet horizon glow.\nSubject: Three prominent five-point stars with clear, friendly silhouettes and a few much smaller supporting sparkles; no characters or people.\nStyle/medium: Premium editorial children's-book illustration, layered cut-paper and soft gouache texture, crisp silhouettes, refined rather than babyish.\nComposition/framing: Exact 16:9 horizontal composition; generous open space; primary glowing star cluster slightly right of center; strong readable shapes that remain clear at website hero size.\nLighting/mood: Calm, wondrous, reassuring; warm starlight with restrained halos.\nColor palette: Accessible deep navy, luminous periwinkle, warm cream and soft gold starlight.\nText: none.\nConstraints: Original artwork; no text, letters, numbers, logos, trademarks, watermark, recognizable copyrighted characters, public figures, photorealistic children, deceptive UI, or unsafe movement cues.\nAvoid: Neon saturation, frightening darkness, dense clutter, gradients that wash out contrast, childish clip-art styling.",
+          "generatedAt": "2026-07-21T18:42:59Z"
+        }
+      }
+    ],
     "audio": [
       {
         "id": "success-tone",

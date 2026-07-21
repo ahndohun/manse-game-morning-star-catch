@@ -2,6 +2,23 @@
   "schemaVersion": 1,
   "assets": [
     {
+      "assetId": "morning-star-hero",
+      "path": "assets/images/morning-star-hero.png",
+      "license": {
+        "spdxId": "MIT",
+        "name": "MIT License",
+        "url": "https://spdx.org/licenses/MIT.html",
+        "attribution": "Generated for Manse — Morning Star Catch"
+      },
+      "provenance": {
+        "kind": "generated",
+        "tool": "OpenAI image generation (built-in imagegen)",
+        "model": "Not reported by the built-in tool",
+        "prompt": "Use case: stylized-concept\nAsset type: game website hero illustration, 16:9 landscape\nPrimary request: Create an original, dreamy night-sky scene for a gentle child-friendly motion game about catching twinkling morning stars. Warm golden stars drift along calm, reachable curved paths above softly layered periwinkle cloud islands.\nScene/backdrop: Deep navy night sky with sparse constellation dots, subtle painterly grain, and a quiet horizon glow.\nSubject: Three prominent five-point stars with clear, friendly silhouettes and a few much smaller supporting sparkles; no characters or people.\nStyle/medium: Premium editorial children's-book illustration, layered cut-paper and soft gouache texture, crisp silhouettes, refined rather than babyish.\nComposition/framing: Exact 16:9 horizontal composition; generous open space; primary glowing star cluster slightly right of center; strong readable shapes that remain clear at website hero size.\nLighting/mood: Calm, wondrous, reassuring; warm starlight with restrained halos.\nColor palette: Accessible deep navy, luminous periwinkle, warm cream and soft gold starlight.\nText: none.\nConstraints: Original artwork; no text, letters, numbers, logos, trademarks, watermark, recognizable copyrighted characters, public figures, photorealistic children, deceptive UI, or unsafe movement cues.\nAvoid: Neon saturation, frightening darkness, dense clutter, gradients that wash out contrast, childish clip-art styling.",
+        "generatedAt": "2026-07-21T18:42:59Z"
+      }
+    },
+    {
       "assetId": "success-tone",
       "path": "assets/audio/success.wav",
       "license": {

@@ -10,6 +10,16 @@
       "sha256": "c458052c3dbf05f85536f886ad1de83c27829269205e5656e9f57bf5b6b376f4"
     },
     {
+      "path": "/packs/morning-star-catch/assets/images/morning-star-hero.png",
+      "origin": "generated",
+      "tool": "OpenAI image generation (built-in imagegen)",
+      "model": "Not reported by the built-in tool",
+      "prompt": "Use case: stylized-concept\nAsset type: game website hero illustration, 16:9 landscape\nPrimary request: Create an original, dreamy night-sky scene for a gentle child-friendly motion game about catching twinkling morning stars. Warm golden stars drift along calm, reachable curved paths above softly layered periwinkle cloud islands.\nScene/backdrop: Deep navy night sky with sparse constellation dots, subtle painterly grain, and a quiet horizon glow.\nSubject: Three prominent five-point stars with clear, friendly silhouettes and a few much smaller supporting sparkles; no characters or people.\nStyle/medium: Premium editorial children's-book illustration, layered cut-paper and soft gouache texture, crisp silhouettes, refined rather than babyish.\nComposition/framing: Exact 16:9 horizontal composition; generous open space; primary glowing star cluster slightly right of center; strong readable shapes that remain clear at website hero size.\nLighting/mood: Calm, wondrous, reassuring; warm starlight with restrained halos.\nColor palette: Accessible deep navy, luminous periwinkle, warm cream and soft gold starlight.\nText: none.\nConstraints: Original artwork; no text, letters, numbers, logos, trademarks, watermark, recognizable copyrighted characters, public figures, photorealistic children, deceptive UI, or unsafe movement cues.\nAvoid: Neon saturation, frightening darkness, dense clutter, gradients that wash out contrast, childish clip-art styling.",
+      "generatedAt": "2026-07-21T18:42:59Z",
+      "license": "MIT",
+      "sha256": "8ac0048271a5c687b46218fb62aa005bb108da22d405a3f1d60a08ae85f8d892"
+    },
+    {
       "path": "/packs/morning-star-catch/assets/audio/success.wav",
       "origin": "original-procedural",
       "creator": "Manse",
