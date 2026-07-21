@@ -1,1 +1,1 @@
-export const GAME_CONFIG = {"slug":"morning-star-catch","title":"반짝별 잡기 (Morning Star Catch)","summary":"Reach out and catch the twinkling stars drifting across the night sky.","creator":"Manse","sourceUrl":"https://github.com/replace-me/morning-star-catch","locale":"ko"} as const;
+export const GAME_CONFIG = {"slug":"morning-star-catch","title":"반짝별 잡기 (Morning Star Catch)","summary":"Reach out and catch the twinkling stars drifting across the night sky.","creator":"Manse","sourceUrl":"https://github.com/ahndohun/manse-game-morning-star-catch","locale":"ko"} as const;
