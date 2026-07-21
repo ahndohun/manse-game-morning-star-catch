@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "manse.morning-star-catch",
+  "slug": "morning-star-catch",
+  "title": [
+    {
+      "locale": "ko",
+      "text": "반짝별 잡기 (Morning Star Catch)"
+    }
+  ],
+  "summary": [
+    {
+      "locale": "ko",
+      "text": "Reach out and catch the twinkling stars drifting across the night sky."
+    }
+  ],
+  "creator": "Manse",
+  "energy": "gentle",
+  "gameUrl": "https://morning-star-catch.example.invalid/",
+  "sourceUrl": "https://github.com/replace-me/morning-star-catch",
+  "engineVersion": "0.2.0",
+  "locales": [
+    "ko"
+  ],
+  "ageRange": {
+    "min": 3,
+    "max": 6
+  },
+  "movementTags": [
+    "touch"
+  ],
+  "accessibility": {
+    "captions": true,
+    "seatedMode": true,
+    "highContrast": true,
+    "reducedStimulation": true,
+    "audioCues": true
+  },
+  "thumbnail": {
+    "url": "https://morning-star-catch.example.invalid/thumbnail.png",
+    "mediaType": "image/png",
+    "alt": [
+      {
+        "locale": "ko",
+        "text": "Abstract motion-game artwork for 반짝별 잡기 (Morning Star Catch)"
+      }
+    ]
+  },
+  "license": {
+    "spdxId": "MIT",
+    "name": "MIT License",
+    "url": "https://spdx.org/licenses/MIT.html",
+    "attribution": "Manse — 반짝별 잡기 (Morning Star Catch)"
+  },
+  "contentProvenance": {
+    "hasGeneratedAssets": false,
+    "hasThirdPartyAssets": true,
+    "provenanceUrl": "https://morning-star-catch.example.invalid/asset-provenance.json"
+  },
+  "permissions": {
+    "camera": true,
+    "deviceLocalStorage": true
+  }
+}

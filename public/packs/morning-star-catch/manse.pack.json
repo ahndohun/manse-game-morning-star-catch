@@ -1,0 +1,250 @@
+{
+  "schemaVersion": 1,
+  "meta": {
+    "id": "manse.morning-star-catch",
+    "title": [
+      {
+        "locale": "ko",
+        "text": "반짝별 잡기 (Morning Star Catch)"
+      }
+    ],
+    "summary": [
+      {
+        "locale": "ko",
+        "text": "Reach out and catch the twinkling stars drifting across the night sky."
+      }
+    ],
+    "theme": "A gentle night-sky playground where a child catches twinkling stars with their hands",
+    "locales": [
+      "ko"
+    ],
+    "ageBands": [
+      "2-3",
+      "4-5",
+      "6-7"
+    ],
+    "estMinutes": 2,
+    "engine": {
+      "minimumVersion": "0.1.0",
+      "maximumVersion": "0.2.0"
+    },
+    "compiler": {
+      "model": "GPT-5.6 via Codex",
+      "reasoningEffort": "creator-session",
+      "generatedAt": "2026-07-21T14:31:25.787Z"
+    }
+  },
+  "permissions": {
+    "camera": true,
+    "deviceLocalStorage": true
+  },
+  "cast": [
+    {
+      "id": "guide",
+      "name": [
+        {
+          "locale": "ko",
+          "text": "Guide"
+        }
+      ],
+      "artAssetId": null,
+      "description": "A neutral runtime guide rendered without a character asset."
+    }
+  ],
+  "entrySceneId": "welcome",
+  "scenes": [
+    {
+      "id": "welcome",
+      "kind": "story",
+      "narration": {
+        "items": [
+          {
+            "locale": "ko",
+            "text": "The stars are out! Let's catch the twinkling ones.",
+            "audioAssetId": null
+          }
+        ],
+        "captionDefaultOn": true
+      },
+      "demo": null,
+      "challenge": null,
+      "learning": null,
+      "artAssetId": null,
+      "energy": "calm",
+      "terminal": false,
+      "transitions": [
+        {
+          "on": "always",
+          "to": "round-one",
+          "adapt": null
+        }
+      ]
+    },
+    {
+      "id": "round-one",
+      "kind": "challenge",
+      "narration": {
+        "items": [
+          {
+            "locale": "ko",
+            "text": "Reach out and touch each twinkling star to catch it.",
+            "audioAssetId": null
+          }
+        ],
+        "captionDefaultOn": true
+      },
+      "demo": null,
+      "challenge": {
+        "type": "touch_targets",
+        "count": 3,
+        "zone": "reachable",
+        "targetScale": 1.2,
+        "dwellMs": 140,
+        "limb": "hands",
+        "timeBudgetMs": 112000,
+        "successAudioId": "success-tone",
+        "encourageAudioId": "encourage-tone"
+      },
+      "learning": {
+        "kind": "none",
+        "payload": []
+      },
+      "artAssetId": null,
+      "energy": "medium",
+      "terminal": false,
+      "transitions": [
+        {
+          "on": "success",
+          "to": "complete",
+          "adapt": null
+        },
+        {
+          "on": "struggle",
+          "to": "round-two",
+          "adapt": {
+            "targetScaleMul": 1.2,
+            "dwellMsMul": 0.8,
+            "countDelta": -1,
+            "timeBudgetMul": 1.2
+          }
+        }
+      ]
+    },
+    {
+      "id": "round-two",
+      "kind": "challenge",
+      "narration": {
+        "items": [
+          {
+            "locale": "ko",
+            "text": "Reach out and touch each twinkling star to catch it.",
+            "audioAssetId": null
+          }
+        ],
+        "captionDefaultOn": true
+      },
+      "demo": null,
+      "challenge": {
+        "type": "touch_targets",
+        "count": 3,
+        "zone": "reachable",
+        "targetScale": 1.2,
+        "dwellMs": 140,
+        "limb": "hands",
+        "timeBudgetMs": 112000,
+        "successAudioId": "success-tone",
+        "encourageAudioId": "encourage-tone"
+      },
+      "learning": {
+        "kind": "none",
+        "payload": []
+      },
+      "artAssetId": null,
+      "energy": "medium",
+      "terminal": false,
+      "transitions": [
+        {
+          "on": "success",
+          "to": "complete",
+          "adapt": null
+        },
+        {
+          "on": "struggle",
+          "to": "complete",
+          "adapt": null
+        }
+      ]
+    },
+    {
+      "id": "complete",
+      "kind": "celebration",
+      "narration": {
+        "items": [
+          {
+            "locale": "ko",
+            "text": "You caught every star! The sky is sparkling just for you.",
+            "audioAssetId": null
+          }
+        ],
+        "captionDefaultOn": true
+      },
+      "demo": null,
+      "challenge": null,
+      "learning": null,
+      "artAssetId": null,
+      "energy": "calm",
+      "terminal": true,
+      "transitions": []
+    }
+  ],
+  "adaptPolicy": {
+    "targetSuccessBand": [
+      0.65,
+      0.85
+    ],
+    "maxStruggleStreak": 2,
+    "maxHighEnergyMs": 60000
+  },
+  "assets": {
+    "images": [],
+    "audio": [
+      {
+        "id": "success-tone",
+        "path": "assets/audio/success.wav",
+        "mediaType": "audio/wav",
+        "locale": null,
+        "transcript": "",
+        "license": {
+          "spdxId": "MIT",
+          "name": "MIT License",
+          "url": "https://spdx.org/licenses/MIT.html",
+          "attribution": "Manse — 반짝별 잡기 (Morning Star Catch)"
+        },
+        "provenance": {
+          "kind": "original",
+          "creator": "Manse",
+          "createdAt": "2026-07-21T14:31:25.787Z"
+        }
+      },
+      {
+        "id": "encourage-tone",
+        "path": "assets/audio/encourage.wav",
+        "mediaType": "audio/wav",
+        "locale": null,
+        "transcript": "",
+        "license": {
+          "spdxId": "MIT",
+          "name": "MIT License",
+          "url": "https://spdx.org/licenses/MIT.html",
+          "attribution": "Manse — 반짝별 잡기 (Morning Star Catch)"
+        },
+        "provenance": {
+          "kind": "original",
+          "creator": "Manse",
+          "createdAt": "2026-07-21T14:31:25.787Z"
+        }
+      }
+    ],
+    "music": []
+  }
+}
