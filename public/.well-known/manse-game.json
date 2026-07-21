@@ -17,7 +17,7 @@
   "creator": "Manse",
   "energy": "gentle",
   "gameUrl": "https://morning-star-catch.example.invalid/",
-  "sourceUrl": "https://github.com/replace-me/morning-star-catch",
+  "sourceUrl": "https://github.com/ahndohun/manse-game-morning-star-catch",
   "engineVersion": "0.2.0",
   "locales": [
     "ko"
