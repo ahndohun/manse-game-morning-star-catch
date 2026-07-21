@@ -3,11 +3,15 @@
   "assets": [
     {
       "path": "/thumbnail.png",
-      "origin": "original-procedural",
-      "creator": "Manse",
-      "createdAt": "2026-07-21T14:31:25.787Z",
+      "origin": "generated",
+      "tool": "OpenAI image generation (built-in imagegen); center-cropped and resized with macOS sips",
+      "model": "Not reported by the built-in tool",
+      "prompt": "Use case: stylized-concept\nAsset type: game website hero illustration, 16:9 landscape\nPrimary request: Create an original, dreamy night-sky scene for a gentle child-friendly motion game about catching twinkling morning stars.",
+      "generatedAt": "2026-07-21T18:42:59Z",
+      "derivedFrom": "/packs/morning-star-catch/assets/images/morning-star-hero.png",
+      "transformation": "Center-cropped from 1672x941 to 1672x878 and resized to 1200x630.",
       "license": "MIT",
-      "sha256": "c458052c3dbf05f85536f886ad1de83c27829269205e5656e9f57bf5b6b376f4"
+      "sha256": "c483ae60922d289955aff83fb65b5a179ef1e2b85fb03a9db73d46b01078422b"
     },
     {
       "path": "/packs/morning-star-catch/assets/images/morning-star-hero.png",
