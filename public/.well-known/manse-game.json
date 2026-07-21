@@ -5,22 +5,31 @@
   "title": [
     {
       "locale": "ko",
-      "text": "반짝별 잡기 (Morning Star Catch)"
+      "text": "반짝별 잡기"
+    },
+    {
+      "locale": "en",
+      "text": "Morning Star Catch"
     }
   ],
   "summary": [
     {
       "locale": "ko",
+      "text": "밤하늘을 떠다니는 반짝이는 별을 손을 뻗어 잡아 보세요."
+    },
+    {
+      "locale": "en",
       "text": "Reach out and catch the twinkling stars drifting across the night sky."
     }
   ],
   "creator": "Manse",
   "energy": "gentle",
-  "gameUrl": "https://morning-star-catch.example.invalid/",
+  "gameUrl": "https://morning-star-catch.ran584000.chatgpt.site/",
   "sourceUrl": "https://github.com/ahndohun/manse-game-morning-star-catch",
   "engineVersion": "0.2.0",
   "locales": [
-    "ko"
+    "ko",
+    "en"
   ],
   "ageRange": {
     "min": 3,
@@ -37,12 +46,16 @@
     "audioCues": true
   },
   "thumbnail": {
-    "url": "https://morning-star-catch.example.invalid/thumbnail.png",
+    "url": "https://morning-star-catch.ran584000.chatgpt.site/thumbnail.png",
     "mediaType": "image/png",
     "alt": [
       {
         "locale": "ko",
-        "text": "Abstract motion-game artwork for 반짝별 잡기 (Morning Star Catch)"
+        "text": "반짝별 잡기 모션 게임 아트워크"
+      },
+      {
+        "locale": "en",
+        "text": "Motion-game artwork for Morning Star Catch"
       }
     ]
   },
@@ -55,7 +68,7 @@
   "contentProvenance": {
     "hasGeneratedAssets": false,
     "hasThirdPartyAssets": true,
-    "provenanceUrl": "https://morning-star-catch.example.invalid/asset-provenance.json"
+    "provenanceUrl": "https://morning-star-catch.ran584000.chatgpt.site/asset-provenance.json"
   },
   "permissions": {
     "camera": true,
