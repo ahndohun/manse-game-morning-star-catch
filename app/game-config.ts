@@ -21,3 +21,5 @@ export const GAME_CONFIG = {
     },
   },
 } as const;
+
+export const SHOWCASE_URL = "https://manse-showcase.ran584000.chatgpt.site";

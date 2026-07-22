@@ -40,6 +40,26 @@ test("ships a locale-aware full-strength game renderer", async () => {
   assert.match(source, /별자리 완성/);
 });
 
+test("connects the compact platform shell to the exact public Showcase", async () => {
+  const response = await render();
+  const html = await response.text();
+  const showcaseUrl = "https://manse-showcase.ran584000.chatgpt.site";
+  assert.equal(html.match(new RegExp(`href="${showcaseUrl}"`, "g"))?.length, 2);
+  assert.match(html, />MANSE</);
+  assert.match(html, />Browse games</);
+
+  const client = await readFile("app/GameClient.tsx", "utf8");
+  assert.match(client, /browseGames: "게임 둘러보기"/);
+  assert.match(client, /browseGames: "Browse games"/);
+
+  const css = await readFile("app/globals.css", "utf8");
+  assert.match(css, /\.platform-shell\s*\{[\s\S]*?height:\s*68px/);
+  assert.match(css, /@media \(max-width: 620px\)[\s\S]*?\.platform-shell\s*\{\s*height:\s*64px/);
+  assert.match(css, /\.platform-shell-inner\s*\{[\s\S]*?min-width:\s*0/);
+  assert.match(css, /\.platform-browse\s*\{[\s\S]*?white-space:\s*nowrap/);
+  assert.match(css, /\.platform-shell-inner\s*\{[^}]*overflow:\s*hidden/);
+});
+
 test("build bundles the public contract and pose runtime", async () => {
   const manifest = JSON.parse(await readFile("public/.well-known/manse-game.json", "utf8"));
   assert.equal(typeof manifest.slug, "string");

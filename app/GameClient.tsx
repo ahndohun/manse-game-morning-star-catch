@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createMansePlayer, type MansePlayer, type PlayerSnapshot, type ProviderKind } from "@manse/runtime-web";
-import { GAME_CONFIG, type GameLocale } from "./game-config";
+import { GAME_CONFIG, SHOWCASE_URL, type GameLocale } from "./game-config";
 import { createMorningStarRendererFactory } from "./themed-renderer";
 
 const PACK_URL = `/packs/${GAME_CONFIG.slug}/manse.pack.json`;
@@ -37,6 +37,7 @@ const UI_COPY = {
     startError: "게임을 시작할 수 없어요. 다시 시도해 주세요.",
     footer: "Manse가 만들었으며 오픈 소스 Manse 엔진으로 작동합니다. 움직임이 불편하면 언제든 멈추세요.",
     source: "소스 보기 ↗",
+    browseGames: "게임 둘러보기",
   },
   en: {
     kicker: "Independent Manse game",
@@ -60,6 +61,7 @@ const UI_COPY = {
     startError: "The game could not start. Please try again.",
     footer: "Created by Manse and powered by the open-source Manse engine. Stop whenever movement feels uncomfortable.",
     source: "View source ↗",
+    browseGames: "Browse games",
   },
 } as const;
 
@@ -194,7 +196,14 @@ export function GameClient() {
             : copy.simulatorLive;
 
   return (
-    <main>
+    <>
+      <nav className="platform-shell" aria-label="Manse">
+        <div className="platform-shell-inner">
+          <a className="platform-wordmark" href={SHOWCASE_URL} aria-label="Manse Showcase">MANSE</a>
+          <a className="platform-browse" href={SHOWCASE_URL}>{copy.browseGames}</a>
+        </div>
+      </nav>
+      <main>
       <header className="game-hero">
         <div className="hero-topline">
           <p className="kicker">{copy.kicker}</p>
@@ -282,6 +291,7 @@ export function GameClient() {
         <p>{copy.footer}</p>
         <a href={GAME_CONFIG.sourceUrl}>{copy.source}</a>
       </footer>
-    </main>
+      </main>
+    </>
   );
 }
