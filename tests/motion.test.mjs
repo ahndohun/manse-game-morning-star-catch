@@ -46,28 +46,27 @@ test("pointer play catches every authored star and reaches the terminal celebrat
   let timestamp = 2_500;
   let sequence = 0;
   for (let expected = 1; expected <= 3; expected += 1) {
+    assert.equal(session.getSnapshot(timestamp).scene.id, `round-${["one", "two", "three"][expected - 1]}`);
     const target = session.getSnapshot(timestamp).targets.find((candidate) => !candidate.hit);
     assert.notEqual(target, undefined, `star ${expected} must be reachable`);
-    for (const dwell of [20, 80, 80]) {
+    for (const dwell of [20, 120, 120]) {
       timestamp += dwell;
       session.updatePose(pointerFrame(target.x, target.y, timestamp, sequence++));
     }
-    assert.equal(session.getSnapshot(timestamp).completedTargets, expected);
+    assert.equal(session.getSnapshot(timestamp).completedTargets, 1);
+    assert.equal(session.getSnapshot(timestamp).status, "celebrating");
+    timestamp += 1_600;
+    session.tick(timestamp);
   }
 
-  timestamp += 1;
-  session.tick(timestamp);
   const celebrating = session.getSnapshot(timestamp);
-  assert.equal(celebrating.scene.id, "round-one");
-  assert.equal(celebrating.status, "celebrating");
-  assert.equal(celebrating.completedTargets, 3);
+  assert.equal(celebrating.scene.id, "complete");
+  assert.equal(celebrating.status, "playing");
   assert.equal(events.filter((event) => event.type === "target-hit").length, 3);
   assert.equal(events.filter((event) => event.type === "challenge-progress").length, 3);
-  assert.equal(events.some((event) => event.type === "audio-cue" && event.purpose === "success"), true);
+  assert.equal(events.filter((event) => event.type === "audio-cue" && event.purpose === "success").length, 3);
 
   session.tick(timestamp + 1_600);
-  assert.equal(session.getSnapshot(timestamp + 1_600).scene.id, "complete");
-  session.tick(timestamp + 3_200);
-  assert.equal(session.getSnapshot(timestamp + 3_200).status, "complete");
+  assert.equal(session.getSnapshot(timestamp + 1_600).status, "complete");
   assert.equal(events.at(-1)?.type, "complete");
 });

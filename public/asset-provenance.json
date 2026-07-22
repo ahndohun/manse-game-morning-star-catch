@@ -40,6 +40,22 @@
       "sha256": "9d9fc8fa481dfb8bbefc91c38f393f2d24cc02e35bd4bea1068d4a70be429624"
     },
     {
+      "path": "/packs/morning-star-catch/assets/audio/beat-en.wav",
+      "origin": "original-procedural",
+      "creator": "Manse",
+      "createdAt": "2026-07-22T00:00:00.000Z",
+      "license": "MIT",
+      "sha256": "3ef23701510421dad674b876ab7f6e663bdba993d7c1abc36d518cdc55d6f548"
+    },
+    {
+      "path": "/packs/morning-star-catch/assets/audio/beat-ko.wav",
+      "origin": "original-procedural",
+      "creator": "Manse",
+      "createdAt": "2026-07-22T00:00:00.000Z",
+      "license": "MIT",
+      "sha256": "3ef23701510421dad674b876ab7f6e663bdba993d7c1abc36d518cdc55d6f548"
+    },
+    {
       "path": "/models/pose_landmarker_lite.task",
       "origin": "third-party",
       "source": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task",

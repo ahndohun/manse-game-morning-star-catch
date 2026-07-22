@@ -1,12 +1,12 @@
 import {
-  createDefaultRenderer,
   type RendererFactory,
+  type RendererFactoryOptions,
   type RuntimeRenderFrame,
   type RuntimeRenderer,
   type RuntimeTarget,
 } from "@manse/runtime-web";
+import type { GameLocale } from "./game-config";
 
-const ART_URL = "/packs/morning-star-catch/assets/images/morning-star-hero.png";
 const THEME = {
   gold: "#ffd978",
   cream: "#fff3c2",
@@ -17,103 +17,158 @@ const THEME = {
   maxDpr: 2,
 } as const;
 
+const TOTAL_STARS = 3;
+const SIMULATOR_ART_URL = "/packs/morning-star-catch/assets/images/morning-star-hero.png";
+const FONT = '"Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif';
+const COPY = {
+  en: {
+    aria: "Night-sky play field with reachable glowing star targets and a constellation collection trail",
+    mission: "CONSTELLATION QUEST",
+    progress: "STARS",
+    cue: "REACH FOR THE GLOW",
+    reactions: ["FIRST LIGHT!", "STAR CAUGHT!", "SKY COMPLETE!"],
+    complete: "CONSTELLATION COMPLETE",
+    completeBody: "Three warm stars are shining together in the morning sky.",
+    camera: "LOCAL CAMERA · LIVE",
+    simulator: "SKY POINTER · LIVE",
+  },
+  ko: {
+    aria: "손을 뻗어 잡는 반짝별과 별자리 수집 길이 있는 밤하늘 게임 공간",
+    mission: "별자리 탐험",
+    progress: "모은 별",
+    cue: "반짝빛을 향해 손 뻗기",
+    reactions: ["첫 번째 빛!", "별을 잡았어요!", "하늘 완성!"],
+    complete: "별자리 완성",
+    completeBody: "따뜻한 별 세 개가 아침 하늘에서 함께 빛나요.",
+    camera: "기기 내 카메라 · 실행 중",
+    simulator: "별 포인터 · 실행 중",
+  },
+} as const;
+
 type StarBurst = { x: number; y: number; startedAt: number; seed: number };
 
-export const createMorningStarRenderer: RendererFactory = (options): RuntimeRenderer => {
-  const base = createDefaultRenderer(options);
-  Object.assign(base.element.style, {
-    backgroundImage: `linear-gradient(rgba(4,12,46,.02), rgba(4,12,46,.28)), url('${ART_URL}')`,
-    backgroundPosition: "center",
-    backgroundSize: "cover",
-  });
-  base.element.setAttribute(
-    "aria-label",
-    "Night-sky play field with reachable glowing star targets and a constellation collection trail",
-  );
-  const cameraSurface = base.element.firstElementChild as HTMLElement | null;
-  if (cameraSurface?.tagName === "CANVAS") cameraSurface.style.opacity = "0.3";
+export function createMorningStarRendererFactory(locale: GameLocale): RendererFactory {
+  return (options) => new MorningStarRenderer(options, locale);
+}
 
-  const canvas = options.document.createElement("canvas");
-  canvas.dataset.gameForeground = "morning-star-catch";
-  canvas.setAttribute("aria-hidden", "true");
-  Object.assign(canvas.style, {
-    position: "absolute",
-    inset: "0",
-    width: "100%",
-    height: "100%",
-    pointerEvents: "none",
-  });
-  base.element.append(canvas);
-  const context = canvas.getContext("2d");
-  if (context === null) return base;
+class MorningStarRenderer implements RuntimeRenderer {
+  readonly kind = "canvas2d" as const;
+  readonly element: HTMLDivElement;
+  private readonly canvas: HTMLCanvasElement;
+  private readonly context: CanvasRenderingContext2D;
+  private readonly simulatorArt: HTMLImageElement;
+  private readonly copy: (typeof COPY)[GameLocale];
+  private readonly hitTargets = new Set<string>();
+  private readonly bursts: StarBurst[] = [];
+  private sceneCompleted = 0;
+  private missionCompleted = 0;
+  private reactionStartedAt = Number.NEGATIVE_INFINITY;
+  private destroyed = false;
 
-  let lastCompleted = 0;
-  let lastTotal = 3;
-  const hitTargets = new Set<string>();
-  const bursts: StarBurst[] = [];
+  constructor(options: RendererFactoryOptions, locale: GameLocale) {
+    this.copy = COPY[locale];
+    this.element = options.document.createElement("div");
+    this.element.dataset.manseRenderer = "morning-star-catch";
+    this.element.setAttribute("role", "img");
+    this.element.setAttribute("aria-label", this.copy.aria);
+    Object.assign(this.element.style, {
+      position: "relative",
+      width: "100%",
+      height: "100%",
+      minHeight: "320px",
+      overflow: "hidden",
+      background: THEME.navy,
+      touchAction: "none",
+    });
+    this.canvas = options.document.createElement("canvas");
+    this.canvas.setAttribute("aria-hidden", "true");
+    Object.assign(this.canvas.style, { position: "absolute", inset: "0", width: "100%", height: "100%" });
+    const context = this.canvas.getContext("2d", { alpha: false });
+    if (context === null) throw new Error("Canvas 2D is unavailable.");
+    this.context = context;
+    this.simulatorArt = options.document.createElement("img");
+    this.simulatorArt.decoding = "async";
+    this.simulatorArt.src = SIMULATOR_ART_URL;
+    this.element.append(this.canvas);
+    options.container.append(this.element);
+  }
 
-  const render = (frame: RuntimeRenderFrame) => {
-    base.render(frame);
-    const { width, height } = prepareCanvas(canvas, context, THEME.maxDpr);
+  render(frame: RuntimeRenderFrame): void {
+    if (this.destroyed) return;
+    const { canvas, context } = this;
+    const { width, height } = prepareCanvas(this.element, canvas, context, frame.tier);
     if (width === 0 || height === 0) return;
     context.clearRect(0, 0, width, height);
 
+    if (frame.video !== null && frame.video.readyState >= 2) {
+      drawVideoCover(context, frame.video, width, height, frame.mirror);
+      drawCameraGrade(context, width, height);
+    } else if (this.simulatorArt.complete && this.simulatorArt.naturalWidth > 0) {
+      drawImageCover(context, this.simulatorArt, width, height);
+      drawSimulatorGrade(context, width, height);
+    } else {
+      drawNightSet(context, width, height);
+    }
+
     const guide = frame.challenge?.kind === "touch_targets" ? frame.challenge : null;
-    if (guide !== null) lastTotal = Math.max(guide.totalUnits, 1);
-    const completed = guide?.completedUnits ?? (frame.celebrationProgress > 0 ? lastCompleted : 0);
-    const total = lastTotal;
-    if (guide !== null && completed < lastCompleted) {
-      lastCompleted = 0;
-      hitTargets.clear();
+    if (guide !== null && guide.completedUnits < this.sceneCompleted) {
+      this.sceneCompleted = 0;
+      this.hitTargets.clear();
+    }
+    if (guide !== null && guide.completedUnits > this.sceneCompleted) {
+      const gained = guide.completedUnits - this.sceneCompleted;
+      this.missionCompleted = Math.min(TOTAL_STARS, this.missionCompleted + gained);
+      this.reactionStartedAt = frame.timestampMs;
+      this.sceneCompleted = guide.completedUnits;
     }
     for (const target of frame.targets) {
-      if (!target.hit) hitTargets.delete(target.id);
-      if (target.hit && !hitTargets.has(target.id)) {
-        hitTargets.add(target.id);
-        bursts.push({ x: target.x * width, y: target.y * height, startedAt: frame.timestampMs, seed: hash(target.id) });
+      if (!target.hit) this.hitTargets.delete(target.id);
+      if (target.hit && !this.hitTargets.has(target.id)) {
+        this.hitTargets.add(target.id);
+        this.bursts.push({ x: target.x * width, y: target.y * height, startedAt: frame.timestampMs, seed: hash(`${target.id}:${this.missionCompleted}`) });
       }
     }
-    if (completed > lastCompleted && bursts.length === 0) {
-      bursts.push({ x: width * 0.5, y: height * 0.45, startedAt: frame.timestampMs, seed: completed * 0.37 });
-    }
-    lastCompleted = completed;
 
     drawSkyTexture(context, width, height, frame.timestampMs, frame.reducedStimulation);
     drawCloudBanks(context, width, height, frame.timestampMs, frame.reducedStimulation);
-    drawConstellationShelf(context, width, height, total, completed, frame.timestampMs, frame.reducedStimulation);
+    drawConstellationShelf(context, width, height, TOTAL_STARS, this.missionCompleted, frame.timestampMs, frame.reducedStimulation);
     for (const target of frame.targets) {
       drawTargetStar(context, target, width, height, frame.timestampMs, frame.reducedStimulation);
     }
 
-    for (let index = bursts.length - 1; index >= 0; index -= 1) {
-      const age = frame.timestampMs - bursts[index].startedAt;
+    for (let index = this.bursts.length - 1; index >= 0; index -= 1) {
+      const age = frame.timestampMs - this.bursts[index].startedAt;
       if (age > THEME.reactionMs) {
-        bursts.splice(index, 1);
+        this.bursts.splice(index, 1);
         continue;
       }
-      drawStarBurst(context, bursts[index], age / THEME.reactionMs, width, height, frame.reducedStimulation);
+      drawStarBurst(context, this.bursts[index], age / THEME.reactionMs, width, height, frame.reducedStimulation);
     }
     if (frame.celebrationProgress > 0) {
       drawCelebration(context, width, height, frame.celebrationProgress, frame.timestampMs, frame.reducedStimulation);
     }
-  };
+    drawStarHud(context, width, height, frame, this.copy, this.missionCompleted, this.reactionStartedAt);
+  }
 
-  return {
-    kind: base.kind,
-    element: base.element,
-    render,
-    destroy() {
-      canvas.remove();
-      base.destroy();
-    },
-  };
-};
+  destroy(): void {
+    this.destroyed = true;
+    this.bursts.length = 0;
+    this.hitTargets.clear();
+    this.element.remove();
+  }
+}
 
-function prepareCanvas(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, maxDpr: number) {
-  const rect = canvas.getBoundingClientRect();
-  const width = Math.max(0, rect.width);
-  const height = Math.max(0, rect.height);
-  const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
+function prepareCanvas(
+  element: HTMLElement,
+  canvas: HTMLCanvasElement,
+  context: CanvasRenderingContext2D,
+  tier: RuntimeRenderFrame["tier"],
+) {
+  const width = Math.max(1, element.clientWidth || 960);
+  const height = Math.max(1, element.clientHeight || 620);
+  const deviceRatio = typeof devicePixelRatio === "number" ? devicePixelRatio : 1;
+  const tierLimit = tier === "S" || tier === "A" ? THEME.maxDpr : tier === "B" ? 1.5 : 1;
+  const dpr = Math.min(deviceRatio, tierLimit);
   const pixelWidth = Math.round(width * dpr);
   const pixelHeight = Math.round(height * dpr);
   if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
@@ -122,6 +177,159 @@ function prepareCanvas(canvas: HTMLCanvasElement, context: CanvasRenderingContex
   }
   context.setTransform(dpr, 0, 0, dpr, 0, 0);
   return { width, height };
+}
+
+function drawVideoCover(
+  context: CanvasRenderingContext2D,
+  video: HTMLVideoElement,
+  width: number,
+  height: number,
+  mirror: boolean,
+) {
+  const sourceWidth = Math.max(1, video.videoWidth || 1280);
+  const sourceHeight = Math.max(1, video.videoHeight || 720);
+  const sourceRatio = sourceWidth / sourceHeight;
+  const targetRatio = width / height;
+  let sx = 0;
+  let sy = 0;
+  let sw = sourceWidth;
+  let sh = sourceHeight;
+  if (sourceRatio > targetRatio) {
+    sw = sourceHeight * targetRatio;
+    sx = (sourceWidth - sw) / 2;
+  } else {
+    sh = sourceWidth / targetRatio;
+    sy = (sourceHeight - sh) / 2;
+  }
+  context.save();
+  if (mirror) {
+    context.translate(width, 0);
+    context.scale(-1, 1);
+  }
+  context.drawImage(video, sx, sy, sw, sh, 0, 0, width, height);
+  context.restore();
+}
+
+function drawCameraGrade(context: CanvasRenderingContext2D, width: number, height: number) {
+  const vignette = context.createRadialGradient(width * 0.5, height * 0.44, width * 0.08, width * 0.5, height * 0.48, width * 0.74);
+  vignette.addColorStop(0, "rgba(10,22,52,.02)");
+  vignette.addColorStop(0.7, "rgba(10,22,52,.1)");
+  vignette.addColorStop(1, "rgba(5,12,31,.7)");
+  context.fillStyle = vignette;
+  context.fillRect(0, 0, width, height);
+}
+
+function drawImageCover(context: CanvasRenderingContext2D, image: HTMLImageElement, width: number, height: number) {
+  const sourceRatio = image.naturalWidth / image.naturalHeight;
+  const targetRatio = width / height;
+  let sx = 0;
+  let sy = 0;
+  let sw = image.naturalWidth;
+  let sh = image.naturalHeight;
+  if (sourceRatio > targetRatio) {
+    sw = image.naturalHeight * targetRatio;
+    sx = (image.naturalWidth - sw) / 2;
+  } else {
+    sh = image.naturalWidth / targetRatio;
+    sy = (image.naturalHeight - sh) / 2;
+  }
+  context.drawImage(image, sx, sy, sw, sh, 0, 0, width, height);
+}
+
+function drawSimulatorGrade(context: CanvasRenderingContext2D, width: number, height: number) {
+  const grade = context.createLinearGradient(0, 0, 0, height);
+  grade.addColorStop(0, "rgba(4,12,46,.08)");
+  grade.addColorStop(0.58, "rgba(4,12,46,.14)");
+  grade.addColorStop(1, "rgba(4,10,32,.66)");
+  context.fillStyle = grade;
+  context.fillRect(0, 0, width, height);
+}
+
+function drawNightSet(context: CanvasRenderingContext2D, width: number, height: number) {
+  const sky = context.createLinearGradient(0, 0, 0, height);
+  sky.addColorStop(0, "#172d5b");
+  sky.addColorStop(0.55, "#0b1730");
+  sky.addColorStop(1, THEME.navy);
+  context.fillStyle = sky;
+  context.fillRect(0, 0, width, height);
+  const moonGlow = context.createRadialGradient(width * 0.76, height * 0.18, 0, width * 0.76, height * 0.18, width * 0.38);
+  moonGlow.addColorStop(0, "rgba(255,228,146,.24)");
+  moonGlow.addColorStop(1, "rgba(255,228,146,0)");
+  context.fillStyle = moonGlow;
+  context.fillRect(0, 0, width, height);
+}
+
+function drawStarHud(
+  context: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  frame: RuntimeRenderFrame,
+  copy: (typeof COPY)[GameLocale],
+  completed: number,
+  reactionStartedAt: number,
+) {
+  context.save();
+  context.fillStyle = "rgba(7,18,37,.82)";
+  context.strokeStyle = "rgba(210,215,255,.42)";
+  context.lineWidth = 1.5;
+  context.beginPath();
+  context.roundRect(width * 0.03, height * 0.035, width * 0.34, Math.max(54, height * 0.09), 18);
+  context.fill();
+  context.stroke();
+  context.fillStyle = THEME.gold;
+  context.font = `800 ${Math.max(12, width * 0.014)}px ${FONT}`;
+  context.textAlign = "left";
+  context.fillText(copy.mission, width * 0.052, height * 0.072);
+  context.fillStyle = "white";
+  context.font = `900 ${Math.max(18, width * 0.025)}px ${FONT}`;
+  context.fillText(`${copy.progress}  ${completed}/${TOTAL_STARS}`, width * 0.052, height * 0.115);
+  context.textAlign = "right";
+  context.font = `750 ${Math.max(11, width * 0.012)}px ${FONT}`;
+  context.fillText(frame.video !== null ? copy.camera : copy.simulator, width * 0.97, height * 0.07);
+
+  const reactionAge = frame.timestampMs - reactionStartedAt;
+  if (completed > 0 && reactionAge >= 0 && reactionAge < THEME.reactionMs) {
+    context.globalAlpha = Math.sin((reactionAge / THEME.reactionMs) * Math.PI);
+    context.textAlign = "center";
+    context.strokeStyle = "rgba(7,18,37,.85)";
+    context.fillStyle = THEME.cream;
+    context.lineWidth = 7;
+    context.font = `950 ${Math.max(30, width * 0.052)}px ${FONT}`;
+    const text = copy.reactions[Math.min(copy.reactions.length - 1, completed - 1)];
+    context.strokeText(text, width * 0.5, height * 0.47);
+    context.fillText(text, width * 0.5, height * 0.47);
+  } else if (frame.challenge !== null && frame.celebrationProgress === 0) {
+    context.globalAlpha = 0.94;
+    context.textAlign = "center";
+    context.fillStyle = THEME.cream;
+    context.font = `850 ${Math.max(16, width * 0.022)}px ${FONT}`;
+    context.fillText(copy.cue, width * 0.5, height * 0.92);
+  }
+  context.globalAlpha = 1;
+  if (frame.celebrationProgress > 0 && completed >= TOTAL_STARS) {
+    context.fillStyle = "rgba(7,18,37,.86)";
+    context.beginPath();
+    context.roundRect(width * 0.15, height * 0.34, width * 0.7, height * 0.27, 28);
+    context.fill();
+    context.textAlign = "center";
+    context.fillStyle = THEME.gold;
+    context.font = `950 ${Math.max(31, width * 0.057)}px ${FONT}`;
+    context.fillText(copy.complete, width * 0.5, height * 0.46);
+    context.fillStyle = "white";
+    context.font = `650 ${Math.max(14, width * 0.018)}px ${FONT}`;
+    context.fillText(copy.completeBody, width * 0.5, height * 0.535, width * 0.62);
+  }
+  if (frame.caption !== null && frame.celebrationProgress === 0) {
+    context.fillStyle = "rgba(7,18,37,.8)";
+    context.beginPath();
+    context.roundRect(width * 0.16, height * 0.79, width * 0.68, height * 0.075, 16);
+    context.fill();
+    context.textAlign = "center";
+    context.fillStyle = "white";
+    context.font = `650 ${Math.max(13, width * 0.017)}px ${FONT}`;
+    context.fillText(frame.caption, width * 0.5, height * 0.838, width * 0.62);
+  }
+  context.restore();
 }
 
 function drawSkyTexture(

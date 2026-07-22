@@ -27,6 +27,19 @@ test("server-renders the anonymous game start experience", async () => {
   assert.doesNotMatch(html, /signin-with-chatgpt|<iframe\b|<form\b/i);
 });
 
+test("ships a locale-aware full-strength game renderer", async () => {
+  const source = await readFile("app/themed-renderer.ts", "utf8");
+  assert.doesNotMatch(source, /createDefaultRenderer/);
+  assert.match(source, /morning-star-hero\.png/);
+  assert.match(source, /drawImageCover/);
+  assert.match(source, /implements RuntimeRenderer/);
+  assert.match(source, /drawVideoCover\(context, frame\.video,[\s\S]*frame\.mirror\)/);
+  assert.match(source, /drawNightSet/);
+  assert.match(source, /createMorningStarRendererFactory\(locale: GameLocale\)/);
+  assert.match(source, /CONSTELLATION COMPLETE/);
+  assert.match(source, /별자리 완성/);
+});
+
 test("build bundles the public contract and pose runtime", async () => {
   const manifest = JSON.parse(await readFile("public/.well-known/manse-game.json", "utf8"));
   assert.equal(typeof manifest.slug, "string");

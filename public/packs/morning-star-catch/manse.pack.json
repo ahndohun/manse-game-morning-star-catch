@@ -119,10 +119,10 @@
       "demo": null,
       "challenge": {
         "type": "touch_targets",
-        "count": 3,
+        "count": 1,
         "zone": "reachable",
-        "targetScale": 1.2,
-        "dwellMs": 140,
+        "targetScale": 1.3,
+        "dwellMs": 150,
         "limb": "hands",
         "timeBudgetMs": 112000,
         "successAudioId": "success-tone",
@@ -138,7 +138,7 @@
       "transitions": [
         {
           "on": "success",
-          "to": "complete",
+          "to": "round-two",
           "adapt": null
         },
         {
@@ -174,10 +174,60 @@
       "demo": null,
       "challenge": {
         "type": "touch_targets",
-        "count": 3,
+        "count": 1,
         "zone": "reachable",
-        "targetScale": 1.2,
-        "dwellMs": 140,
+        "targetScale": 1.15,
+        "dwellMs": 180,
+        "limb": "hands",
+        "timeBudgetMs": 112000,
+        "successAudioId": "success-tone",
+        "encourageAudioId": "encourage-tone"
+      },
+      "learning": {
+        "kind": "none",
+        "payload": []
+      },
+      "artAssetId": "morning-star-hero",
+      "energy": "medium",
+      "terminal": false,
+      "transitions": [
+        {
+          "on": "success",
+          "to": "round-three",
+          "adapt": null
+        },
+        {
+          "on": "struggle",
+          "to": "round-three",
+          "adapt": null
+        }
+      ]
+    },
+    {
+      "id": "round-three",
+      "kind": "challenge",
+      "narration": {
+        "items": [
+          {
+            "locale": "ko",
+            "text": "마지막 아침별이 조금 더 멀리 떠올랐어요. 천천히 손을 뻗어 별자리를 완성해요.",
+            "audioAssetId": "beat-tone-ko"
+          },
+          {
+            "locale": "en",
+            "text": "The last morning star is drifting a little farther away. Reach gently and complete the constellation.",
+            "audioAssetId": "beat-tone-en"
+          }
+        ],
+        "captionDefaultOn": true
+      },
+      "demo": null,
+      "challenge": {
+        "type": "touch_targets",
+        "count": 1,
+        "zone": "reachable",
+        "targetScale": 1,
+        "dwellMs": 210,
         "limb": "hands",
         "timeBudgetMs": 112000,
         "successAudioId": "success-tone",
@@ -304,6 +354,42 @@
           "kind": "original",
           "creator": "Manse",
           "createdAt": "2026-07-21T14:31:25.787Z"
+        }
+      },
+      {
+        "id": "beat-tone-en",
+        "path": "assets/audio/beat-en.wav",
+        "mediaType": "audio/wav",
+        "locale": "en",
+        "transcript": "",
+        "license": {
+          "spdxId": "MIT",
+          "name": "MIT License",
+          "url": "https://spdx.org/licenses/MIT.html",
+          "attribution": "Manse — Morning Star Catch"
+        },
+        "provenance": {
+          "kind": "original",
+          "creator": "Manse",
+          "createdAt": "2026-07-22T00:00:00.000Z"
+        }
+      },
+      {
+        "id": "beat-tone-ko",
+        "path": "assets/audio/beat-ko.wav",
+        "mediaType": "audio/wav",
+        "locale": "ko",
+        "transcript": "",
+        "license": {
+          "spdxId": "MIT",
+          "name": "MIT License",
+          "url": "https://spdx.org/licenses/MIT.html",
+          "attribution": "Manse — Morning Star Catch"
+        },
+        "provenance": {
+          "kind": "original",
+          "creator": "Manse",
+          "createdAt": "2026-07-22T00:00:00.000Z"
         }
       }
     ],

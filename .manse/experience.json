@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "status": "approved",
+  "identity": {
+    "fantasy": "Reach into a dreamy night sky, catch three drifting morning stars, and assemble them into a glowing constellation before dawn.",
+    "playerVerb": "Reach and hold a hand or pointer over each moving starlight target.",
+    "targetMetaphor": "Warm five-point stars that trail light, fill a capture ring, burst into sparkles, and fly into the constellation shelf."
+  },
+  "beats": [
+    { "id": "round-one", "purpose": "Catch a large forgiving first light and learn the visible hold ring." },
+    { "id": "round-two", "purpose": "Follow a smaller drifting star with a longer, calmer capture hold." },
+    { "id": "round-three", "purpose": "Reach the smallest final morning star and complete the dawn constellation." }
+  ],
+  "presenter": {
+    "source": "app/themed-renderer.ts",
+    "themedEntities": ["five-point starlight targets", "three-slot constellation trail", "layered drifting cloud banks", "painted dawn-night simulator set"],
+    "reactiveStates": ["twinkling available star", "capture ring filling with a luminous trail", "caught star bursting and flying into the constellation"],
+    "continuousFeedback": "The target glow, light trail, capture ring, localized mission tally, reaction callout, and constellation shelf update continuously with every reach.",
+    "scoreAndResolution": "A persistent three-star tally spans three distinct rounds and resolves in a localized constellation-complete panel with an orbital dawn celebration."
+  },
+  "qualityGates": {
+    "themedEntitiesInPlay": true,
+    "threeReactiveStates": true,
+    "continuousInputFeedback": true,
+    "authoredEscalation": true,
+    "scoreAndResolution": true,
+    "threeGameplaySounds": true,
+    "noDebugChrome": true,
+    "cameraSimulatorParity": true,
+    "reducedMotionVerified": true
+  },
+  "evidence": {
+    "gameplayScreenshot": "evidence/morning-star-catch-gameplay.png",
+    "completionScreenshot": "evidence/morning-star-catch-victory.png",
+    "playtestNotes": "evidence/playtest-notes.md"
+  }
+}

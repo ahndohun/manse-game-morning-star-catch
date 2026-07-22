@@ -3,14 +3,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createMansePlayer, type MansePlayer, type PlayerSnapshot, type ProviderKind } from "@manse/runtime-web";
 import { GAME_CONFIG, type GameLocale } from "./game-config";
-import { createMorningStarRenderer } from "./themed-renderer";
+import { createMorningStarRendererFactory } from "./themed-renderer";
 
 const PACK_URL = `/packs/${GAME_CONFIG.slug}/manse.pack.json`;
-const EMPTY: Pick<PlayerSnapshot, "phase" | "provider" | "tier" | "renderer" | "cameraActive" | "targetProgress" | "caption"> = {
+const EMPTY: Pick<PlayerSnapshot, "phase" | "provider" | "cameraActive" | "targetProgress" | "caption"> = {
   phase: "idle",
   provider: "simulated",
-  tier: "A",
-  renderer: null,
   cameraActive: false,
   targetProgress: null,
   caption: null,
@@ -29,8 +27,7 @@ const UI_COPY = {
     chooseMode: "플레이 방법을 선택하세요",
     cameraLocal: "카메라는 기기 안에서만 작동해요",
     simulatorLive: "포인터 시뮬레이터 실행 중",
-    runtimeReady: "런타임 준비됨",
-    tier: "등급",
+    missionSpec: "별빛 구역 3곳 · 아침별 3개",
     startIntro: "먼저 포인터로 시작해 보세요. 카메라 모드는 선택 사항이며, 직접 선택한 뒤에만 권한을 요청해요.",
     playPointer: "포인터로 플레이",
     useCamera: "카메라 사용",
@@ -53,8 +50,7 @@ const UI_COPY = {
     chooseMode: "Choose how to play",
     cameraLocal: "Camera stays on device",
     simulatorLive: "Pointer simulator live",
-    runtimeReady: "Runtime ready",
-    tier: "tier",
+    missionSpec: "3 starlight zones · 3 morning stars",
     startIntro: "Start with the pointer simulator. Camera mode is optional and asks permission only after you choose it.",
     playPointer: "Play with pointer",
     useCamera: "Use my camera",
@@ -98,7 +94,7 @@ export function GameClient() {
       container,
       locale,
       provider,
-      rendererFactory: createMorningStarRenderer,
+      rendererFactory: createMorningStarRendererFactory(locale),
       captions: true,
       reducedStimulation: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
       onEvent: (event) => {
@@ -246,7 +242,7 @@ export function GameClient() {
       <section className="player-shell" aria-label={copy.player}>
         <div className="player-bar">
           <span><i className={error === null ? "status-dot" : "status-dot status-error"} aria-hidden="true" /> {status}</span>
-          <span>{snapshot.renderer ?? copy.runtimeReady} · {copy.tier} {snapshot.tier}</span>
+          <span>{copy.missionSpec}</span>
         </div>
         <div
           className="stage"
