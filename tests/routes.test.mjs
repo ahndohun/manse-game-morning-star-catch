@@ -27,6 +27,19 @@ test("server-renders the anonymous game start experience", async () => {
   assert.doesNotMatch(html, /signin-with-chatgpt|<iframe\b|<form\b/i);
 });
 
+test("uses purposeful localized idle progress without dash placeholders", async () => {
+  const response = await render();
+  const html = await response.text();
+  const body = html.match(/<body[\s\S]*?<\/body>/i)?.[0] ?? html;
+  assert.match(body, />Ready</);
+  assert.doesNotMatch(body, /[—–]/);
+
+  const clientSource = await readFile("app/GameClient.tsx", "utf8");
+  assert.match(clientSource, /progressReady: "준비"/);
+  assert.match(clientSource, /progressReady: "Ready"/);
+  assert.doesNotMatch(clientSource, /[—–]/);
+});
+
 test("ships a locale-aware full-strength game renderer", async () => {
   const source = await readFile("app/themed-renderer.ts", "utf8");
   assert.doesNotMatch(source, /createDefaultRenderer/);

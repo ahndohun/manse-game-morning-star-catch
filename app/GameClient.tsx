@@ -28,6 +28,7 @@ const UI_COPY = {
     cameraLocal: "카메라는 기기 안에서만 작동해요",
     simulatorLive: "포인터 시뮬레이터 실행 중",
     missionSpec: "별빛 구역 3곳 · 아침별 3개",
+    progressReady: "준비",
     startIntro: "먼저 포인터로 시작해 보세요. 카메라 모드는 선택 사항이며, 직접 선택한 뒤에만 권한을 요청해요.",
     playPointer: "포인터로 플레이",
     useCamera: "카메라 사용",
@@ -52,6 +53,7 @@ const UI_COPY = {
     cameraLocal: "Camera stays on device",
     simulatorLive: "Pointer simulator live",
     missionSpec: "3 starlight zones · 3 morning stars",
+    progressReady: "Ready",
     startIntro: "Start with the pointer simulator. Camera mode is optional and asks permission only after you choose it.",
     playPointer: "Play with pointer",
     useCamera: "Use my camera",
@@ -277,7 +279,7 @@ export function GameClient() {
         </div>
         <div className="player-footer" aria-live="polite">
           <span role={error === null ? undefined : "alert"}>{error ?? snapshot.caption ?? copy.comfort}</span>
-          <strong>{progress === null ? "—" : `${progress.completed} / ${progress.total}`}</strong>
+          <strong>{progress === null ? copy.progressReady : `${progress.completed} / ${progress.total}`}</strong>
         </div>
         {snapshot.phase !== "idle" && (
           <div className="restart-row">
